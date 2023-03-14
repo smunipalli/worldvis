@@ -2,20 +2,22 @@ import "./App.css";
 import { useState, useEffect, useMemo } from "react";
 import * as d3 from "d3";
 import Globe from "react-globe.gl";
+import Button from "@mui/material/Button";
 
 function App() {
-  // const N = 300;
-  // const gData = [...Array(N).keys()].map(() => ({
-  //   lat: (Math.random() - 0.5) * 180,
-  //   lng: (Math.random() - 0.5) * 360,
-  //   size: 2, // Math.random() / 3,
-  //   color: ["red", "white", "blue", "green"][Math.round(Math.random() * 3)],
-  // }));
+  const regularGlobe = () => {
+    const N = 300;
+    const gData = [...Array(N).keys()].map(() => ({
+      lat: (Math.random() - 0.5) * 180,
+      lng: (Math.random() - 0.5) * 360,
+      size: 2, // Math.random() / 3,
+      color: ["red", "white", "blue", "green"][Math.round(Math.random() * 3)],
+    }));
 
-  // console.log(gData);
+    console.log(gData);
 
-  // return <Globe globeImageUrl="./img/earth-night.jpg" pointsData={gData} />;
-
+    return <Globe globeImageUrl="./img/earth-night.jpg" pointsData={gData} />;
+  };
   const World = () => {
     const [countries, setCountries] = useState({ features: [] });
     const [hoverD, setHoverD] = useState();
@@ -64,7 +66,16 @@ function App() {
     );
   };
 
-  return <World />;
+  const ChooseIndicators = () => {
+    return <Button variant="contained">Hello World</Button>;
+  };
+
+  return (
+    <>
+      <ChooseIndicators />
+      <World />
+    </>
+  );
 }
 
 export default App;
