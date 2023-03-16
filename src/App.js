@@ -5,7 +5,9 @@ import Globe from "react-globe.gl";
 import Button from "@mui/material/Button";
 
 function App() {
-  const regularGlobe = () => {
+  const [selectGlobes, setselectGlobes] = useState("regularGlobe");
+
+  const RegularGlobe = () => {
     const N = 300;
     const gData = [...Array(N).keys()].map(() => ({
       lat: (Math.random() - 0.5) * 180,
@@ -18,7 +20,7 @@ function App() {
 
     return <Globe globeImageUrl="./img/earth-night.jpg" pointsData={gData} />;
   };
-  const World = () => {
+  const ChoroplethGlobe = () => {
     const [countries, setCountries] = useState({ features: [] });
     const [hoverD, setHoverD] = useState();
 
@@ -66,14 +68,44 @@ function App() {
     );
   };
 
+  const SwitchGlobes = () => {
+    switch (selectGlobes) {
+      case "regularGlobe":
+        return <RegularGlobe />;
+      case "choroplethGlobe":
+        return <ChoroplethGlobe />;
+      default:
+        return <RegularGlobe />;
+    }
+  };
+
   const ChooseIndicators = () => {
-    return <Button variant="contained">Hello World</Button>;
+    return (
+      <>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setselectGlobes("regularGlobe");
+          }}
+        >
+          regularGlobe
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setselectGlobes("choroplethGlobe");
+          }}
+        >
+          choroplethGlobe
+        </Button>
+      </>
+    );
   };
 
   return (
     <>
       <ChooseIndicators />
-      <World />
+      <SwitchGlobes />
     </>
   );
 }
