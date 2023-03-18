@@ -259,7 +259,12 @@ function App() {
                   }}
                 >
                   <ListItemIcon>
-                    <PublicIcon color="primary" />
+                    <PublicIcon
+                      color={(() =>
+                        selectGlobes === "regularGlobe"
+                          ? "primary"
+                          : "inherit")()}
+                    />
                   </ListItemIcon>
                   <ListItemText primary="Regular Globe" />
                 </ListItemButton>
@@ -270,7 +275,12 @@ function App() {
                   }}
                 >
                   <ListItemIcon>
-                    <PublicIcon />
+                    <PublicIcon
+                      color={(() =>
+                        selectGlobes === "choroplethGlobe"
+                          ? "primary"
+                          : "inherit")()}
+                    />
                   </ListItemIcon>
                   <ListItemText primary="Choropleth Globe" />
                 </ListItemButton>
@@ -280,7 +290,12 @@ function App() {
                   }}
                 >
                   <ListItemIcon>
-                    <PublicIcon />
+                    <PublicIcon
+                      color={(() =>
+                        selectGlobes === "choroplethGlobe1"
+                          ? "primary"
+                          : "inherit")()}
+                    />
                   </ListItemIcon>
                   <ListItemText primary="Income Level" />
                 </ListItemButton>
