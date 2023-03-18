@@ -6,7 +6,6 @@ import Button from "@mui/material/Button";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import _ from "lodash";
-import Draggable, { DraggableCore } from "react-draggable";
 
 function App() {
   const [selectGlobes, setselectGlobes] = useState("regularGlobe");
