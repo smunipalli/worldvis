@@ -104,9 +104,14 @@ function App() {
     let match_countries = [];
     let missing_countries = [];
 
-    let mapping = [
-      { income_level: "North America", geo: "United States of America" },
-    ];
+    let colorMap = {
+      HIC: "#2adb0b",
+      UMC: "#0b69db",
+      LMC: "#f7f307",
+      LIC: "#f70707",
+      "": "#000000",
+      INX: "#000000",
+    };
 
     const filterCountries = () => {
       _.forEach(incomeLevel, (v) => {
@@ -121,6 +126,12 @@ function App() {
         if (val === undefined) {
           missing_countries.push(v);
         } else {
+          val.incomeLevel = v.incomeLevel;
+
+          if (val.properties.ISO_A3 == "USA") {
+            console.log(getVal(val));
+            console.log(colorScale(1));
+          }
           match_countries.push(val);
         }
       });
@@ -160,8 +171,11 @@ function App() {
         lineHoverPrecision={0}
         polygonsData={filterCountries()}
         polygonAltitude={(d) => (d === hoverD ? 0.12 : 0.06)}
+        // polygonCapColor={(d) =>
+        //   d === hoverD ? "steelblue" : colorScale(getVal(d))
+        // }
         polygonCapColor={(d) =>
-          d === hoverD ? "steelblue" : colorScale(getVal(d))
+          d === hoverD ? "steelblue" : colorMap[d.incomeLevel]
         }
         polygonSideColor={() => "rgba(0, 100, 0, 0.15)"}
         polygonStrokeColor={() => "#111"}
