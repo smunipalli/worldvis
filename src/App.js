@@ -113,7 +113,7 @@ function App() {
       INX: "#000000",
     };
 
-    const filterCountries = () => {
+    const filterCountries = useMemo(() => {
       _.forEach(incomeLevel, (v) => {
         const val = _.find(countries.features, (o) => {
           // return o.properties.ISO_A3 === v.id;
@@ -160,7 +160,7 @@ function App() {
 
       return match_countries.filter((d) => d.properties.ISO_A2 !== "AQ");
       // return countries.features.filter((d) => d.properties.ISO_A2 !== "AQ");
-    };
+    }, [countries]);
 
     // console.log(incomeLevel);
 
@@ -169,21 +169,24 @@ function App() {
         globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
         backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
         lineHoverPrecision={0}
-        polygonsData={filterCountries()}
+        polygonsData={filterCountries}
         polygonAltitude={(d) => (d === hoverD ? 0.12 : 0.06)}
         // polygonCapColor={(d) =>
         //   d === hoverD ? "steelblue" : colorScale(getVal(d))
         // }
         polygonCapColor={(d) =>
-          d === hoverD ? "steelblue" : colorMap[d.incomeLevel]
+          d === hoverD ? "#cfd1d0" : colorMap[d.incomeLevel]
         }
         polygonSideColor={() => "rgba(0, 100, 0, 0.15)"}
         polygonStrokeColor={() => "#111"}
-        polygonLabel={({ properties: d }) => `
-        <b>${d.ADMIN} (${d.ISO_A2}):</b> <br />
-        GDP: <i>${d.GDP_MD_EST}</i> M$<br/>
-        Population: <i>${d.POP_EST}</i>
+        polygonLabel={(d) => `
+        Income Level: <i>${d.incomeLevel}</i><br/>
       `}
+        // polygonLabel={({ properties: d }) => `
+        // <b>${d.ADMIN} (${d.ISO_A2}):</b> <br />
+        // GDP: <i>${d.GDP_MD_EST}</i> M$<br/>
+        // Population: <i>${d.POP_EST}</i>
+        // `}
         onPolygonHover={setHoverD}
         polygonsTransitionDuration={300}
       />
