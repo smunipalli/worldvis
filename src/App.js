@@ -12,7 +12,9 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import PublicIcon from "@mui/icons-material/Public";
-
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Unstable_Grid2";
 import _ from "lodash";
 
 function App() {
@@ -224,7 +226,11 @@ function App() {
     return (
       <>
         <div
-          style={{ opacity: cardHover, transform: "scale(0.8)" }}
+          style={{
+            opacity: cardHover,
+            transform: "scale(0.8)",
+            width: "25vh",
+          }}
           onMouseEnter={() => setCardHover(1.0)}
           onMouseLeave={() => setCardHover(0.5)}
         >
@@ -299,33 +305,6 @@ function App() {
                   </ListItemIcon>
                   <ListItemText primary="Income Level" />
                 </ListItemButton>
-                {/* <Button
-              variant="contained"
-              onClick={() => {
-                setselectGlobes("regularGlobe");
-              }}
-            >
-              regularGlobe
-            </Button>
-            &nbsp;
-            <Button
-              variant="contained"
-              onClick={() => {
-                setselectGlobes("choroplethGlobe");
-              }}
-            >
-              choroplethGlobe
-            </Button>
-            &nbsp;
-            <Button
-              variant="contained"
-              onClick={() => {
-                setselectGlobes("incomeLevel");
-              }}
-            >
-              incomeLevel
-            </Button>
-            <Button size="small">Learn More</Button> */}
               </List>
             </CardActions>
           </Card>
@@ -333,12 +312,33 @@ function App() {
       </>
     );
   };
+  const MapDetails = () => {
+    const [cardHover, setCardHover] = useState(0.5);
+    return (
+      <>
+        <div
+          style={{ opacity: cardHover, transform: "scale(0.8)" }}
+          onMouseEnter={() => setCardHover(1.0)}
+          onMouseLeave={() => setCardHover(0.5)}
+        >
+          <Card variant="outlined">
+            <CardContent>
+              <Typography
+                sx={{ fontSize: 17, marginBottom: "-30px", fontWeight: "bold" }}
+                color="text.secondary"
+                gutterBottom
+              >
+                Map Details
+              </Typography>
+            </CardContent>
+            <CardActions></CardActions>
+          </Card>
+        </div>
+      </>
+    );
+  };
 
   return (
-    // <>
-    // <Fab color="primary" aria-label="add">
-    //   <AddIcon />
-    // </Fab>
     <div style={{ position: "relative" }}>
       <div
         style={{
@@ -348,8 +348,31 @@ function App() {
           marginLeft: "3em",
         }}
       >
-        <ChooseIndicators />
+        <Container fixed>
+          <Box sx={{ flexGrow: 1 }}>
+            <Grid container spacing={2} sx={{ height: "96vh" }}>
+              <Grid xs={12} md={5} lg={4}>
+                <ChooseIndicators />
+              </Grid>
+              <Grid container xs={12} md={7} lg={8} spacing={4}></Grid>
+              <Grid
+                xs={12}
+                md={5}
+                lg={4}
+                container
+                justifyContent="space-between"
+                alignItems="center"
+                flexDirection={{ xs: "column", sm: "row" }}
+              >
+                <Grid sx={{ order: { xs: 2, sm: 1 }, positions: "bottom" }}>
+                  <MapDetails />
+                </Grid>
+              </Grid>
+            </Grid>
+          </Box>
+        </Container>
       </div>
+
       <div style={{ position: "absolute" }}>
         <SwitchGlobes />
       </div>
