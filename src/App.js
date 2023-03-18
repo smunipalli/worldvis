@@ -3,7 +3,10 @@ import { useState, useEffect, useMemo } from "react";
 import * as d3 from "d3";
 import Globe from "react-globe.gl";
 import Button from "@mui/material/Button";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
 import _ from "lodash";
+import Draggable, { DraggableCore } from "react-draggable";
 
 function App() {
   const [selectGlobes, setselectGlobes] = useState("regularGlobe");
@@ -242,10 +245,26 @@ function App() {
   };
 
   return (
-    <>
-      <ChooseIndicators />
-      <SwitchGlobes />
-    </>
+    // <>
+    // <Fab color="primary" aria-label="add">
+    //   <AddIcon />
+    // </Fab>
+    <div style={{ position: "relative" }}>
+      <div
+        style={{
+          position: "absolute",
+          zIndex: 1000,
+          marginTop: "10em",
+          marginLeft: "10em",
+        }}
+      >
+        <ChooseIndicators />
+      </div>
+      <div style={{ position: "absolute" }}>
+        <SwitchGlobes />
+      </div>
+    </div>
+    // </>
   );
 }
 
