@@ -79,7 +79,7 @@ function App() {
     );
   };
 
-  const ChoroplethGlobe1 = () => {
+  const IncomeLevelGlobe = () => {
     const [countries, setCountries] = useState({ features: [] });
     const [incomeLevel, setincomeLevel] = useState({ income: [] });
 
@@ -210,8 +210,8 @@ function App() {
         return <RegularGlobe />;
       case "choroplethGlobe":
         return <ChoroplethGlobe />;
-      case "choroplethGlobe1":
-        return <ChoroplethGlobe1 />;
+      case "incomeLevel":
+        return <IncomeLevelGlobe />;
 
       default:
         return <RegularGlobe />;
@@ -286,13 +286,13 @@ function App() {
                 </ListItemButton>
                 <ListItemButton
                   onClick={() => {
-                    setselectGlobes("choroplethGlobe1");
+                    setselectGlobes("incomeLevel");
                   }}
                 >
                   <ListItemIcon>
                     <PublicIcon
                       color={(() =>
-                        selectGlobes === "choroplethGlobe1"
+                        selectGlobes === "incomeLevel"
                           ? "primary"
                           : "inherit")()}
                     />
@@ -320,7 +320,7 @@ function App() {
             <Button
               variant="contained"
               onClick={() => {
-                setselectGlobes("choroplethGlobe1");
+                setselectGlobes("incomeLevel");
               }}
             >
               incomeLevel
@@ -344,8 +344,8 @@ function App() {
         style={{
           position: "absolute",
           zIndex: 1000,
-          marginTop: "10em",
-          marginLeft: "10em",
+          marginTop: "3em",
+          marginLeft: "3em",
         }}
       >
         <ChooseIndicators />
