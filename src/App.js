@@ -175,12 +175,13 @@ function App() {
         //   d === hoverD ? "steelblue" : colorScale(getVal(d))
         // }
         polygonCapColor={(d) =>
-          d === hoverD ? "#cfd1d0" : colorMap[d.incomeLevel]
+          d === hoverD ? "#ab6d02" : colorMap[d.incomeLevel]
         }
         polygonSideColor={() => "rgba(0, 100, 0, 0.15)"}
         polygonStrokeColor={() => "#111"}
         polygonLabel={(d) => `
-        Income Level: <i>${d.incomeLevel}</i><br/>
+        <div style="background:#000; padding:10px; border-radius: 5px; opacity:0.9"><b>${d.properties.ADMIN} (${d.properties.ISO_A2}):</b><br />        
+        Income Level: <i>${d.incomeLevel}</i><br/></div>
       `}
         // polygonLabel={({ properties: d }) => `
         // <b>${d.ADMIN} (${d.ISO_A2}):</b> <br />
