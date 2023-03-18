@@ -3,8 +3,16 @@ import { useState, useEffect, useMemo } from "react";
 import * as d3 from "d3";
 import Globe from "react-globe.gl";
 import Button from "@mui/material/Button";
-import Fab from "@mui/material/Fab";
-import AddIcon from "@mui/icons-material/Add";
+import Card from "@mui/material/Card";
+import Typography from "@mui/material/Typography";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import PublicIcon from "@mui/icons-material/Public";
+
 import _ from "lodash";
 
 function App() {
@@ -211,34 +219,102 @@ function App() {
   };
 
   const ChooseIndicators = () => {
+    const [cardHover, setCardHover] = useState(0.5);
+
     return (
       <>
-        <Button
-          variant="contained"
-          onClick={() => {
-            setselectGlobes("regularGlobe");
-          }}
+        <div
+          style={{ opacity: cardHover, transform: "scale(0.8)" }}
+          onMouseEnter={() => setCardHover(1.0)}
+          onMouseLeave={() => setCardHover(0.5)}
         >
-          regularGlobe
-        </Button>
-        &nbsp;
-        <Button
-          variant="contained"
-          onClick={() => {
-            setselectGlobes("choroplethGlobe");
-          }}
-        >
-          choroplethGlobe
-        </Button>
-        &nbsp;
-        <Button
-          variant="contained"
-          onClick={() => {
-            setselectGlobes("choroplethGlobe1");
-          }}
-        >
-          incomeLevel
-        </Button>
+          <Card variant="outlined">
+            <CardContent>
+              <Typography
+                sx={{ fontSize: 17, marginBottom: "-30px", fontWeight: "bold" }}
+                color="text.secondary"
+                gutterBottom
+              >
+                Choose indicators
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <List
+                sx={{
+                  width: "100%",
+                  maxWidth: 360,
+                  bgcolor: "background.paper",
+                }}
+                component="nav"
+                // aria-labelledby="nested-list-subheader"
+                // subheader={
+                //   <ListSubheader component="div" id="nested-list-subheader">
+                //     Nested List Items
+                //   </ListSubheader>
+                // }
+              >
+                <ListItemButton
+                  onClick={() => {
+                    setselectGlobes("regularGlobe");
+                  }}
+                >
+                  <ListItemIcon>
+                    <PublicIcon color="primary" />
+                  </ListItemIcon>
+                  <ListItemText primary="Regular Globe" />
+                </ListItemButton>
+
+                <ListItemButton
+                  onClick={() => {
+                    setselectGlobes("choroplethGlobe");
+                  }}
+                >
+                  <ListItemIcon>
+                    <PublicIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Choropleth Globe" />
+                </ListItemButton>
+                <ListItemButton
+                  onClick={() => {
+                    setselectGlobes("choroplethGlobe1");
+                  }}
+                >
+                  <ListItemIcon>
+                    <PublicIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Income Level" />
+                </ListItemButton>
+                {/* <Button
+              variant="contained"
+              onClick={() => {
+                setselectGlobes("regularGlobe");
+              }}
+            >
+              regularGlobe
+            </Button>
+            &nbsp;
+            <Button
+              variant="contained"
+              onClick={() => {
+                setselectGlobes("choroplethGlobe");
+              }}
+            >
+              choroplethGlobe
+            </Button>
+            &nbsp;
+            <Button
+              variant="contained"
+              onClick={() => {
+                setselectGlobes("choroplethGlobe1");
+              }}
+            >
+              incomeLevel
+            </Button>
+            <Button size="small">Learn More</Button> */}
+              </List>
+            </CardActions>
+          </Card>
+        </div>
       </>
     );
   };
