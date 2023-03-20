@@ -88,7 +88,7 @@ function App() {
 
     useEffect(() => {
       // load data
-      fetch("./geo/world_population.csv")
+      fetch("./geo/worldcities_latlog.csv")
         .then((res) => res.text())
         .then((csv) =>
           d3.csvParse(csv, ({ lat, lng, pop }) => ({
@@ -376,6 +376,9 @@ function App() {
       </>
     );
   };
+
+  // For world population - list the top 10 populated cities
+  // For income level show the color map
   const MapDetails = () => {
     const [cardHover, setCardHover] = useState(0.5);
     return (
