@@ -15,6 +15,7 @@ import PublicIcon from "@mui/icons-material/Public";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Unstable_Grid2";
+import Chart from "./Chart";
 import _ from "lodash";
 
 function App() {
@@ -317,19 +318,24 @@ function App() {
     return (
       <>
         <div
-          style={{ opacity: cardHover, transform: "scale(0.8)" }}
+          style={{
+            opacity: cardHover,
+            width: "40vh",
+            transform: "scale(0.8)",
+          }}
           onMouseEnter={() => setCardHover(1.0)}
           onMouseLeave={() => setCardHover(0.5)}
         >
           <Card variant="outlined">
             <CardContent>
               <Typography
-                sx={{ fontSize: 17, marginBottom: "-30px", fontWeight: "bold" }}
+                sx={{ fontSize: 17, marginBottom: "30px", fontWeight: "bold" }}
                 color="text.secondary"
                 gutterBottom
               >
                 Map Details
               </Typography>
+              <Chart />
             </CardContent>
             <CardActions></CardActions>
           </Card>
