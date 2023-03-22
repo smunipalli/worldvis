@@ -195,30 +195,7 @@ function App() {
         }
       });
 
-      // adding missing locations from mappings
-
-      // _.forEach(mapping, (v) => {
-      //   const val = _.find(countries.features, (o) => {
-      //     return o.properties.NAME === v.geo;
-      //   });
-      //   if (val === undefined) {
-      //     missing_countries.push(v);
-      //   } else {
-      //     match_countries.push(val);
-      //   }
-      // });
-
-      // console.log(match_countries);
-      // console.log(missing_countries);
-
-      // console.log(
-      //   _.filter(match_countries, (o) => {
-      //     return o !== undefined;
-      //   })
-      // );
-
       return match_countries.filter((d) => d.properties.ISO_A2 !== "AQ");
-      // return countries.features.filter((d) => d.properties.ISO_A2 !== "AQ");
     }, [countries]);
 
     // console.log(incomeLevel);
@@ -230,9 +207,6 @@ function App() {
         lineHoverPrecision={0}
         polygonsData={filterCountries}
         polygonAltitude={(d) => (d === hoverD ? 0.12 : 0.06)}
-        // polygonCapColor={(d) =>
-        //   d === hoverD ? "steelblue" : colorScale(getVal(d))
-        // }
         polygonCapColor={(d) =>
           d === hoverD ? "#ab6d02" : colorMap[d.incomeLevel]
         }
@@ -242,11 +216,90 @@ function App() {
         <div style="background:#000; padding:10px; border-radius: 5px; opacity:0.9"><b>${d.properties.ADMIN} (${d.properties.ISO_A2}):</b><br />        
         Income Level: <i>${d.incomeLevel}</i><br/></div>
       `}
-        // polygonLabel={({ properties: d }) => `
-        // <b>${d.ADMIN} (${d.ISO_A2}):</b> <br />
-        // GDP: <i>${d.GDP_MD_EST}</i> M$<br/>
-        // Population: <i>${d.POP_EST}</i>
-        // `}
+        onPolygonHover={setHoverD}
+        polygonsTransitionDuration={300}
+      />
+    );
+  };
+
+  const EnergyUseGlobe = () => {
+    const [countries, setCountries] = useState({ features: [] });
+    const [energyAccess, setenergyAccess] = useState({ income: [] });
+
+    const [hoverD, setHoverD] = useState();
+
+    // Option 1: give 2 color names
+    const globeColor = d3
+      .scaleLinear()
+      .domain([1, 100])
+      .range(["#ff7d00", "#0077b6"]);
+    // .range(["#0077b6", "#03045e"]);
+
+    useEffect(() => {
+      // load data
+      fetch("./geo/ne_110m_admin_0_countries.geojson")
+        .then((res) => res.json())
+        .then(setCountries);
+    }, []);
+
+    useEffect(() => {
+      // load data
+      fetch("./geo/electricity_access.json")
+        .then((res) => res.json())
+        .then(setenergyAccess);
+    }, []);
+
+    // GDP per capita (avoiding countries with small pop)
+    const getVal = (feat) =>
+      feat.properties.GDP_MD_EST / Math.max(1e5, feat.properties.POP_EST);
+
+    const maxVal = useMemo(
+      () => Math.max(...countries.features.map(getVal)),
+      [countries]
+    );
+
+    let match_countries = [];
+    let missing_countries = [];
+
+    const filterCountries = useMemo(() => {
+      _.forEach(energyAccess, (v) => {
+        const val = _.find(countries.features, (o) => {
+          return (
+            (o.properties.NAME.toLowerCase() === v.Entity.toLowerCase() ||
+              o.properties.ISO_A3 === v.Code) &&
+            v.Year === 2000 // TODO: modify the year
+          );
+        });
+
+        if (val === undefined) {
+          missing_countries.push(v);
+        } else {
+          val.Access_to_Electricity_percent = v.Access_to_Electricity_percent;
+          match_countries.push(val);
+        }
+      });
+
+      return match_countries.filter((d) => d.properties.ISO_A2 !== "AQ");
+    }, [countries]);
+
+    // console.log(incomeLevel);
+
+    return (
+      <Globe
+        globeImageUrl="//unpkg.com/three-globe/example/img/earth-dark.jpg"
+        backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
+        lineHoverPrecision={0}
+        polygonsData={filterCountries}
+        polygonAltitude={(d) => (d === hoverD ? 0.12 : 0.06)}
+        polygonCapColor={(d) =>
+          d === hoverD ? "#ab6d02" : globeColor(d.Access_to_Electricity_percent)
+        }
+        polygonSideColor={() => "rgba(0, 100, 0, 0.15)"}
+        polygonStrokeColor={() => "#111"}
+        polygonLabel={(d) => `
+        <div style="background:#000; padding:10px; border-radius: 5px; opacity:0.9"><b>${d.properties.ADMIN} (${d.properties.ISO_A2}):</b><br />        
+        % Accessible Electricity: <i>${d.Access_to_Electricity_percent}</i><br/></div>
+      `}
         onPolygonHover={setHoverD}
         polygonsTransitionDuration={300}
       />
@@ -261,9 +314,10 @@ function App() {
         return <ChoroplethGlobe />;
       case "incomeLevel":
         return <IncomeLevelGlobe />;
+      case "energyUse":
+        return <EnergyUseGlobe />;
       case "worldPopulation":
         return <WorldPopulation />;
-
       default:
         return <RegularGlobe />;
     }
@@ -341,6 +395,20 @@ function App() {
                 </ListItemButton>
                 <ListItemButton
                   onClick={() => {
+                    setselectGlobes("energyUse");
+                  }}
+                >
+                  <ListItemIcon>
+                    <PublicIcon
+                      color={(() =>
+                        selectGlobes === "energyUse" ? "primary" : "inherit")()}
+                    />
+                  </ListItemIcon>
+                  <ListItemText primary="Energy consumption" />
+                </ListItemButton>
+
+                <ListItemButton
+                  onClick={() => {
                     setselectGlobes("incomeLevel");
                   }}
                 >
@@ -378,6 +446,7 @@ function App() {
   };
 
   // For world population - list the top 10 populated cities
+  // Show graph for literacy rate and young population
   // For income level show the color map
   const MapDetails = () => {
     const [cardHover, setCardHover] = useState(0.5);
