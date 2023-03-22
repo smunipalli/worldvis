@@ -15,11 +15,16 @@ import PublicIcon from "@mui/icons-material/Public";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Unstable_Grid2";
+import Slider from "@mui/material/Slider";
+import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 import Chart from "./Chart";
 import _ from "lodash";
 
 function App() {
   const [selectGlobes, setselectGlobes] = useState("regularGlobe");
+
+  // global Sliders
+  const [energyYear, setEnergyYear] = useState(1990);
 
   const RegularGlobe = () => {
     const N = 300;
@@ -233,7 +238,6 @@ function App() {
       .scaleLinear()
       .domain([1, 100])
       .range(["#ff7d00", "#0077b6"]);
-    // .range(["#0077b6", "#03045e"]);
 
     useEffect(() => {
       // load data
@@ -267,7 +271,7 @@ function App() {
           return (
             (o.properties.NAME.toLowerCase() === v.Entity.toLowerCase() ||
               o.properties.ISO_A3 === v.Code) &&
-            v.Year === 2000 // TODO: modify the year
+            v.Year === energyYear // TODO: modify the year
           );
         });
 
@@ -292,7 +296,7 @@ function App() {
         polygonsData={filterCountries}
         polygonAltitude={(d) => (d === hoverD ? 0.12 : 0.06)}
         polygonCapColor={(d) =>
-          d === hoverD ? "#ab6d02" : globeColor(d.Access_to_Electricity_percent)
+          d === hoverD ? "#80ed99" : globeColor(d.Access_to_Electricity_percent)
         }
         polygonSideColor={() => "rgba(0, 100, 0, 0.15)"}
         polygonStrokeColor={() => "#111"}
@@ -450,6 +454,111 @@ function App() {
   // For income level show the color map
   const MapDetails = () => {
     const [cardHover, setCardHover] = useState(0.5);
+    const [sEnergyYear, setSEnergyYear] = useState(1990);
+
+    // Prevent race condition between the slider rendering and the canvas
+    // use 2 levels of states and then a button to render the map
+    const sliderChnage = (e, value) => {
+      setSEnergyYear(value);
+    };
+
+    const sliders = () => {
+      switch (selectGlobes) {
+        case "regularGlobe":
+          return (
+            <Typography
+              sx={{ fontSize: 17, marginBottom: "30px", fontWeight: "bold" }}
+              color="text.secondary"
+              gutterBottom
+            >
+              Regular Map
+            </Typography>
+          );
+        case "choroplethGlobe":
+          return (
+            <Typography
+              sx={{ fontSize: 17, marginBottom: "30px", fontWeight: "bold" }}
+              color="text.secondary"
+              gutterBottom
+            >
+              Choropleth Globe
+            </Typography>
+          );
+        case "incomeLevel":
+          return (
+            <Typography
+              sx={{ fontSize: 17, marginBottom: "30px", fontWeight: "bold" }}
+              color="text.secondary"
+              gutterBottom
+            >
+              Income Level
+            </Typography>
+          );
+        case "energyUse":
+          return (
+            <>
+              <Typography
+                sx={{ fontSize: 17, marginBottom: "30px", fontWeight: "bold" }}
+                color="text.secondary"
+                gutterBottom
+              >
+                % Energy Access to the population for {energyYear}
+              </Typography>
+              <br />
+              <Grid container spacing={2} alignItems="center">
+                <Grid item>Select Year</Grid>
+                <Grid item xs>
+                  <Slider
+                    aria-label="Year"
+                    defaultValue={energyYear}
+                    getAriaValueText={() => sEnergyYear}
+                    onChange={sliderChnage}
+                    valueLabelDisplay="on"
+                    step={1}
+                    marks
+                    min={1990}
+                    max={2020}
+                  />
+                </Grid>
+              </Grid>
+
+              <br />
+              <Button
+                variant="contained"
+                endIcon={<AutoGraphIcon />}
+                onClick={() => {
+                  setEnergyYear(sEnergyYear);
+                }}
+              >
+                Render
+              </Button>
+              <br />
+              <br />
+            </>
+          );
+        case "worldPopulation":
+          return (
+            <Typography
+              sx={{ fontSize: 17, marginBottom: "30px", fontWeight: "bold" }}
+              color="text.secondary"
+              gutterBottom
+            >
+              World Population
+            </Typography>
+          );
+        default:
+          return (
+            <Typography
+              sx={{ fontSize: 17, marginBottom: "30px", fontWeight: "bold" }}
+              color="text.secondary"
+              gutterBottom
+            >
+              Regular Map
+            </Typography>
+          );
+      }
+    };
+
     return (
       <>
         <div
@@ -470,6 +579,8 @@ function App() {
               >
                 Map Details
               </Typography>
+              <br />
+              {sliders()}
               <Chart />
             </CardContent>
             <CardActions></CardActions>
