@@ -18,30 +18,17 @@ import Grid from "@mui/material/Unstable_Grid2";
 import Slider from "@mui/material/Slider";
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 import Chart from "./Chart";
+import AreaChart from "./AreaChart";
 import _ from "lodash";
 
 function App() {
-  const [selectGlobes, setselectGlobes] = useState("regularGlobe");
+  const [selectGlobes, setselectGlobes] = useState("worldPopulation");
 
   // global Sliders
   const [energyYear, setEnergyYear] = useState(1990);
   const [incomeYear, setIncomeYear] = useState(1987);
   const [male2529Year, setMale2529Year] = useState(1960);
   const [female2529Year, setFemale2529Year] = useState(1960);
-
-  const RegularGlobe = () => {
-    const N = 300;
-    const gData = [...Array(N).keys()].map(() => ({
-      lat: (Math.random() - 0.5) * 180,
-      lng: (Math.random() - 0.5) * 360,
-      size: 2, // Math.random() / 3,
-      color: ["red", "white", "blue", "green"][Math.round(Math.random() * 3)],
-    }));
-
-    console.log(gData);
-
-    return <Globe globeImageUrl="./img/earth-night.jpg" pointsData={gData} />;
-  };
 
   const WorldPopulation = () => {
     const globeEl = useRef();
@@ -442,8 +429,6 @@ function App() {
 
   const SwitchGlobes = () => {
     switch (selectGlobes) {
-      case "regularGlobe":
-        return <RegularGlobe />;
       case "incomeLevel":
         return <IncomeLevelGlobe />;
       case "energyUse":
@@ -456,7 +441,7 @@ function App() {
         return <Female2529Globe />;
 
       default:
-        return <RegularGlobe />;
+        return <WorldPopulation />;
     }
   };
 
@@ -606,16 +591,6 @@ function App() {
 
     const sliders = () => {
       switch (selectGlobes) {
-        case "regularGlobe":
-          return (
-            <Typography
-              sx={{ fontSize: 17, marginBottom: "30px", fontWeight: "bold" }}
-              color="text.secondary"
-              gutterBottom
-            >
-              Regular Map
-            </Typography>
-          );
         case "incomeLevel":
           return (
             <>
@@ -807,7 +782,7 @@ function App() {
               color="text.secondary"
               gutterBottom
             >
-              Regular Map
+              World Population
             </Typography>
           );
       }
@@ -818,7 +793,7 @@ function App() {
         <div
           style={{
             opacity: cardHover,
-            width: "40vh",
+            width: "50vh",
             transform: "scale(0.8)",
           }}
           onMouseEnter={() => setCardHover(1.0)}
@@ -835,7 +810,7 @@ function App() {
               </Typography>
               <br />
               {sliders()}
-              <Chart />
+              <AreaChart />
             </CardContent>
             <CardActions></CardActions>
           </Card>
