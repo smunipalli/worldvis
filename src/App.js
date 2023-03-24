@@ -290,10 +290,10 @@ function App() {
     let missing_countries = [];
 
     let colorMap = {
-      HIC: "#2adb0b",
-      UMC: "#0b69db",
-      LMC: "#f7f307",
-      LIC: "#f70707",
+      HIC: "#208b3a",
+      UMC: "#1a759f",
+      LMC: "#ffca3a",
+      LIC: "#c1121f",
       "": "#000000",
       INX: "#000000",
     };
@@ -330,7 +330,7 @@ function App() {
         polygonsData={filterCountries}
         polygonAltitude={(d) => (d === hoverD ? 0.12 : 0.06)}
         polygonCapColor={(d) =>
-          d === hoverD ? "#ab6d02" : colorMap[d.incomeLevel]
+          d === hoverD ? "#979dac" : colorMap[d.incomeLevel]
         }
         polygonSideColor={() => "rgba(0, 100, 0, 0.15)"}
         polygonStrokeColor={() => "#111"}
