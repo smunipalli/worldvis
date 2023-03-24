@@ -384,10 +384,10 @@ function App() {
     const filterCountries = useMemo(() => {
       _.forEach(energyAccess, (v) => {
         const val = _.find(countries.features, (o) => {
+          // if (v.Entity === undefined || v.Entity === null) return false;
           return (
-            (o.properties.NAME.toLowerCase() === v.Entity.toLowerCase() ||
-              o.properties.ISO_A3 === v.Code) &&
-            v.Year === energyYear // TODO: modify the year
+            // (o.properties.NAME.toLowerCase() === v.Entity.toLowerCase() ||
+            o.properties.ISO_A3 === v.Code && v.Year === energyYear // TODO: modify the year
           );
         });
 

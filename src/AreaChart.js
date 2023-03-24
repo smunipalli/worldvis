@@ -43,7 +43,7 @@ const AreaChart = () => {
     )
       //   "https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/5_OneCatSevNumOrdered.csv",
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         //////////
         // GENERAL //
         //////////
