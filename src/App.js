@@ -27,6 +27,7 @@ function App() {
   const [energyYear, setEnergyYear] = useState(1990);
   const [incomeYear, setIncomeYear] = useState(1987);
   const [male2529Year, setMale2529Year] = useState(1960);
+  const [female2529Year, setFemale2529Year] = useState(1960);
 
   const RegularGlobe = () => {
     const N = 300;
@@ -224,6 +225,95 @@ function App() {
     );
   };
 
+  const Female2529Globe = () => {
+    const [countries, setCountries] = useState({ features: [] });
+    const [femalePercentage, setfemalePercentage] = useState({
+      femalepercentage: [],
+    });
+
+    const [hoverD, setHoverD] = useState();
+
+    useEffect(() => {
+      // load data
+      fetch("./geo/ne_110m_admin_0_countries.geojson")
+        .then((res) => res.json())
+        .then(setCountries);
+    }, []);
+
+    useEffect(() => {
+      // load data
+      fetch("./geo/percent_female_population_25-29.json")
+        .then((res) => res.json())
+        .then(setfemalePercentage);
+    }, []);
+
+    const colorScale = d3.scaleSequentialSqrt(d3.interpolateYlOrRd);
+
+    // GDP per capita (avoiding countries with small pop)
+    const getVal = (feat) =>
+      feat.properties.GDP_MD_EST / Math.max(1e5, feat.properties.POP_EST);
+
+    const maxVal = useMemo(
+      () => Math.max(...countries.features.map(getVal)),
+      [countries]
+    );
+    colorScale.domain([0, maxVal]);
+
+    let match_countries = [];
+    let missing_countries = [];
+
+    // Option 1: give 2 color names
+    const globeColor = d3
+      .scaleLinear()
+      .domain([1, 10])
+      .range(["#ff7d00", "#0077b6"]);
+
+    const filterCountries = useMemo(() => {
+      _.forEach(femalePercentage.Codes, (v, k) => {
+        const val = _.find(countries.features, (o) => {
+          return o.properties.ISO_A3 === v;
+        });
+
+        if (val === undefined) {
+          missing_countries.push(v);
+        } else {
+          val.femalePercentage = femalePercentage[female2529Year.toString()][k];
+
+          console.log(femalePercentage[female2529Year.toString()][k]);
+
+          if (val.properties.ISO_A3 == "USA") {
+            console.log(getVal(val));
+            console.log(colorScale(1));
+          }
+          match_countries.push(val);
+        }
+      });
+
+      return match_countries.filter((d) => d.properties.ISO_A2 !== "AQ");
+    }, [countries]);
+
+    return (
+      <Globe
+        globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
+        backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
+        lineHoverPrecision={0}
+        polygonsData={filterCountries}
+        polygonAltitude={(d) => (d === hoverD ? 0.12 : 0.06)}
+        polygonCapColor={(d) =>
+          d === hoverD ? "#ab6d02" : globeColor(parseFloat(d.femalePercentage))
+        }
+        polygonSideColor={() => "rgba(0, 100, 0, 0.15)"}
+        polygonStrokeColor={() => "#111"}
+        polygonLabel={(d) => `
+        <div style="background:#000; padding:10px; border-radius: 5px; opacity:0.9"><b>${d.properties.ADMIN} (${d.properties.ISO_A2}):</b><br />
+        Female 25-29 %: <i>${d.femalePercentage}</i><br/></div>
+      `}
+        onPolygonHover={setHoverD}
+        polygonsTransitionDuration={300}
+      />
+    );
+  };
+
   const IncomeLevelGlobe = () => {
     const [countries, setCountries] = useState({ features: [] });
     const [incomeLevel, setincomeLevel] = useState({ income: [] });
@@ -411,6 +501,8 @@ function App() {
         return <WorldPopulation />;
       case "male_2529":
         return <Male2529Globe />;
+      case "female_2529":
+        return <Female2529Globe />;
 
       default:
         return <RegularGlobe />;
@@ -578,6 +670,7 @@ function App() {
     const [sEnergyYear, setSEnergyYear] = useState(1990);
     const [sIncomeYear, setSIncomeYear] = useState(1987);
     const [sMale2529Year, setSMale2529Year] = useState(1960);
+    const [sFemale2529Year, setSFemale2529Year] = useState(1960);
 
     // Prevent race condition between the slider rendering and the canvas
     // use 2 levels of states and then a button to render the map
@@ -591,6 +684,10 @@ function App() {
 
     const sliderChangeMale2529 = (e, value) => {
       setSMale2529Year(value);
+    };
+
+    const sliderChangeFemale2529 = (e, value) => {
+      setSFemale2529Year(value);
     };
 
     const sliders = () => {
@@ -736,6 +833,50 @@ function App() {
                 endIcon={<AutoGraphIcon />}
                 onClick={() => {
                   setMale2529Year(sMale2529Year);
+                }}
+              >
+                Render
+              </Button>
+              <br />
+              <br />
+            </>
+          );
+
+        case "female_2529":
+          return (
+            <>
+              <Typography
+                sx={{ fontSize: 17, marginBottom: "30px", fontWeight: "bold" }}
+                color="text.secondary"
+                gutterBottom
+              >
+                % of Female population 25 - 29
+              </Typography>
+              <br />
+              <br />
+              <Grid container spacing={2} alignItems="center">
+                <Grid item>Select Year</Grid>
+                <Grid item xs>
+                  <Slider
+                    aria-label="Year"
+                    defaultValue={female2529Year}
+                    getAriaValueText={() => sFemale2529Year}
+                    onChange={sliderChangeFemale2529}
+                    valueLabelDisplay="on"
+                    step={1}
+                    marks
+                    min={1960}
+                    max={2021}
+                  />
+                </Grid>
+              </Grid>
+
+              <br />
+              <Button
+                variant="contained"
+                endIcon={<AutoGraphIcon />}
+                onClick={() => {
+                  setFemale2529Year(sFemale2529Year);
                 }}
               >
                 Render
