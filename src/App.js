@@ -25,6 +25,7 @@ function App() {
 
   // global Sliders
   const [energyYear, setEnergyYear] = useState(1990);
+  const [incomeYear, setIncomeYear] = useState(1987);
 
   const RegularGlobe = () => {
     const N = 300;
@@ -148,7 +149,7 @@ function App() {
 
     useEffect(() => {
       // load data
-      fetch("./geo/income_level.json")
+      fetch("./geo/Income_groups_history.json")
         .then((res) => res.json())
         .then(setincomeLevel);
     }, []);
@@ -178,19 +179,17 @@ function App() {
     };
 
     const filterCountries = useMemo(() => {
-      _.forEach(incomeLevel, (v) => {
+      _.forEach(incomeLevel.Codes, (v, k) => {
         const val = _.find(countries.features, (o) => {
-          // return o.properties.ISO_A3 === v.id;
-          return (
-            o.properties.NAME.toLowerCase() === v.value.toLowerCase() ||
-            o.properties.ISO_A3 === v.id
-          );
+          return o.properties.ISO_A3 === v;
         });
 
         if (val === undefined) {
           missing_countries.push(v);
         } else {
-          val.incomeLevel = v.incomeLevel;
+          val.incomeLevel = incomeLevel[incomeYear.toString()][k];
+
+          // console.log(incomeLevel[incomeYear.toString()][k]);
 
           if (val.properties.ISO_A3 == "USA") {
             console.log(getVal(val));
@@ -202,8 +201,6 @@ function App() {
 
       return match_countries.filter((d) => d.properties.ISO_A2 !== "AQ");
     }, [countries]);
-
-    // console.log(incomeLevel);
 
     return (
       <Globe
@@ -218,7 +215,7 @@ function App() {
         polygonSideColor={() => "rgba(0, 100, 0, 0.15)"}
         polygonStrokeColor={() => "#111"}
         polygonLabel={(d) => `
-        <div style="background:#000; padding:10px; border-radius: 5px; opacity:0.9"><b>${d.properties.ADMIN} (${d.properties.ISO_A2}):</b><br />        
+        <div style="background:#000; padding:10px; border-radius: 5px; opacity:0.9"><b>${d.properties.ADMIN} (${d.properties.ISO_A2}):</b><br />
         Income Level: <i>${d.incomeLevel}</i><br/></div>
       `}
         onPolygonHover={setHoverD}
@@ -455,11 +452,16 @@ function App() {
   const MapDetails = () => {
     const [cardHover, setCardHover] = useState(0.5);
     const [sEnergyYear, setSEnergyYear] = useState(1990);
+    const [sIncomeYear, setSIncomeYear] = useState(1987);
 
     // Prevent race condition between the slider rendering and the canvas
     // use 2 levels of states and then a button to render the map
-    const sliderChnage = (e, value) => {
+    const sliderChangeEnergyYear = (e, value) => {
       setSEnergyYear(value);
+    };
+
+    const sliderChangeIncomeYear = (e, value) => {
+      setSIncomeYear(value);
     };
 
     const sliders = () => {
@@ -486,13 +488,46 @@ function App() {
           );
         case "incomeLevel":
           return (
-            <Typography
-              sx={{ fontSize: 17, marginBottom: "30px", fontWeight: "bold" }}
-              color="text.secondary"
-              gutterBottom
-            >
-              Income Level
-            </Typography>
+            <>
+              <Typography
+                sx={{ fontSize: 17, marginBottom: "30px", fontWeight: "bold" }}
+                color="text.secondary"
+                gutterBottom
+              >
+                Income Level
+              </Typography>
+              <br />
+              <br />
+              <Grid container spacing={2} alignItems="center">
+                <Grid item>Select Year</Grid>
+                <Grid item xs>
+                  <Slider
+                    aria-label="Year"
+                    defaultValue={incomeYear}
+                    getAriaValueText={() => sIncomeYear}
+                    onChange={sliderChangeIncomeYear}
+                    valueLabelDisplay="on"
+                    step={1}
+                    marks
+                    min={1987}
+                    max={2021}
+                  />
+                </Grid>
+              </Grid>
+
+              <br />
+              <Button
+                variant="contained"
+                endIcon={<AutoGraphIcon />}
+                onClick={() => {
+                  setIncomeYear(sIncomeYear);
+                }}
+              >
+                Render
+              </Button>
+              <br />
+              <br />
+            </>
           );
         case "energyUse":
           return (
@@ -512,7 +547,7 @@ function App() {
                     aria-label="Year"
                     defaultValue={energyYear}
                     getAriaValueText={() => sEnergyYear}
-                    onChange={sliderChnage}
+                    onChange={sliderChangeEnergyYear}
                     valueLabelDisplay="on"
                     step={1}
                     marks
