@@ -1078,6 +1078,13 @@ function App() {
           <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2} sx={{ height: "96vh" }}>
               <Grid xs={12} md={5} lg={4}>
+                <Typography
+                  variant="h4"
+                  sx={{ color: "#ffffff", marginLeft: "30px" }}
+                >
+                  Global Data Visualization
+                </Typography>
+                <br />
                 <ChooseIndicators />
               </Grid>
               <Grid container xs={12} md={7} lg={8} spacing={4}></Grid>
