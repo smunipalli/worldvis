@@ -505,7 +505,7 @@ function App() {
                         selectGlobes === "energyUse" ? "primary" : "inherit")()}
                     />
                   </ListItemIcon>
-                  <ListItemText primary="Energy consumption" />
+                  <ListItemText primary="Electricity access" />
                 </ListItemButton>
 
                 <ListItemButton
@@ -642,7 +642,7 @@ function App() {
                 color="text.secondary"
                 gutterBottom
               >
-                % Energy Access to the population for {energyYear}
+                % Electricity Access to the population for {energyYear}
               </Typography>
               <br />
               <Grid container spacing={2} alignItems="center">
@@ -796,6 +796,7 @@ function App() {
               style={{
                 opacity: cardHover,
                 width: "64vh",
+                marginLeft: "-4vh",
                 transform: "scale(0.8)",
               }}
               onMouseEnter={() => setCardHover(1.0)}
