@@ -17,7 +17,6 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Unstable_Grid2";
 import Slider from "@mui/material/Slider";
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
-import Chart from "./Chart";
 import AreaChart from "./AreaChart";
 import _ from "lodash";
 
@@ -130,12 +129,12 @@ function App() {
         } else {
           val.malePercentage = malePercentage[male2529Year.toString()][k];
 
-          console.log(malePercentage[male2529Year.toString()][k]);
+          // console.log(malePercentage[male2529Year.toString()][k]);
 
-          if (val.properties.ISO_A3 == "USA") {
-            console.log(getVal(val));
-            console.log(colorScale(1));
-          }
+          // if (val.properties.ISO_A3 == "USA") {
+          //   console.log(getVal(val));
+          //   console.log(colorScale(1));
+          // }
           match_countries.push(val);
         }
       });
@@ -219,12 +218,12 @@ function App() {
         } else {
           val.femalePercentage = femalePercentage[female2529Year.toString()][k];
 
-          console.log(femalePercentage[female2529Year.toString()][k]);
+          // console.log(femalePercentage[female2529Year.toString()][k]);
 
-          if (val.properties.ISO_A3 == "USA") {
-            console.log(getVal(val));
-            console.log(colorScale(1));
-          }
+          // if (val.properties.ISO_A3 == "USA") {
+          //   console.log(getVal(val));
+          //   console.log(colorScale(1));
+          // }
           match_countries.push(val);
         }
       });
@@ -311,10 +310,10 @@ function App() {
 
           // console.log(incomeLevel[incomeYear.toString()][k]);
 
-          if (val.properties.ISO_A3 == "USA") {
-            console.log(getVal(val));
-            console.log(colorScale(1));
-          }
+          // if (val.properties.ISO_A3 == "USA") {
+          //   console.log(getVal(val));
+          //   console.log(colorScale(1));
+          // }
           match_countries.push(val);
         }
       });
