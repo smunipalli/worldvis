@@ -788,35 +788,86 @@ function App() {
       }
     };
 
-    return (
-      <>
-        <div
-          style={{
-            opacity: cardHover,
-            width: "50vh",
-            transform: "scale(0.8)",
-          }}
-          onMouseEnter={() => setCardHover(1.0)}
-          onMouseLeave={() => setCardHover(0.5)}
-        >
-          <Card variant="outlined">
-            <CardContent>
-              <Typography
-                sx={{ fontSize: 17, marginBottom: "30px", fontWeight: "bold" }}
-                color="text.secondary"
-                gutterBottom
-              >
-                Map Details
-              </Typography>
-              <br />
-              {sliders()}
-              <AreaChart />
-            </CardContent>
-            <CardActions></CardActions>
-          </Card>
-        </div>
-      </>
-    );
+    const displayChart = () => {
+      if (selectGlobes == "energyUse") {
+        return (
+          <>
+            <div
+              style={{
+                opacity: cardHover,
+                width: "64vh",
+                transform: "scale(0.8)",
+              }}
+              onMouseEnter={() => setCardHover(1.0)}
+              onMouseLeave={() => setCardHover(0.5)}
+            >
+              <Card variant="outlined">
+                <CardContent>
+                  <Typography
+                    sx={{
+                      fontSize: 17,
+                      marginBottom: "30px",
+                      fontWeight: "bold",
+                    }}
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    Map Details
+                  </Typography>
+                  <br />
+                  {sliders()}
+                  {(() => {
+                    if (selectGlobes == "energyUse") return <AreaChart />;
+                    else return <></>;
+                  })()}
+                </CardContent>
+                <CardActions></CardActions>
+              </Card>
+            </div>
+          </>
+        );
+      } else {
+        return (
+          <>
+            <div
+              style={{
+                opacity: cardHover,
+                width: "28vh",
+                transform: "scale(0.8)",
+              }}
+              onMouseEnter={() => setCardHover(1.0)}
+              onMouseLeave={() => setCardHover(0.5)}
+            >
+              <Card variant="outlined">
+                <CardContent>
+                  <Typography
+                    sx={{
+                      fontSize: 17,
+                      marginBottom: "30px",
+                      fontWeight: "bold",
+                    }}
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    Map Details
+                  </Typography>
+                  <br />
+                  {sliders()}
+                  {(() => {
+                    if (selectGlobes === "worldPopulation")
+                      return <>As of March 2022</>;
+                    return <></>;
+                  })()}
+                </CardContent>
+                <CardActions></CardActions>
+              </Card>
+            </div>
+          </>
+        );
+      }
+    };
+
+    return displayChart();
   };
 
   return (

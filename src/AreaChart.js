@@ -38,11 +38,12 @@ const AreaChart = () => {
 
     //Read the data
     d3.csv(
-      "https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/5_OneCatSevNumOrdered_wide.csv"
+      "./geo/world_electricity_consumption.csv"
+      // "https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/5_OneCatSevNumOrdered_wide.csv"
     )
       //   "https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/5_OneCatSevNumOrdered.csv",
       .then((data) => {
-        // console.log(data);
+        console.log(data);
         //////////
         // GENERAL //
         //////////
@@ -65,7 +66,7 @@ const AreaChart = () => {
           .scaleLinear()
           .domain(
             d3.extent(data, function (d) {
-              return d.year;
+              return d.Year;
             })
           )
           .range([0, width]);
@@ -80,7 +81,7 @@ const AreaChart = () => {
           .attr("text-anchor", "end")
           .attr("x", width)
           .attr("y", height + 40)
-          .text("Time (year)");
+          .text("Time (Year)");
 
         // Add Y axis label:
         svg
@@ -92,7 +93,7 @@ const AreaChart = () => {
           .attr("text-anchor", "start");
 
         // Add Y axis
-        const y = d3.scaleLinear().domain([0, 200000]).range([height, 0]);
+        const y = d3.scaleLinear().domain([0, 30000]).range([height, 0]);
         svg.append("g").call(d3.axisLeft(y).ticks(5));
 
         //////////
@@ -126,7 +127,7 @@ const AreaChart = () => {
         const area = d3
           .area()
           .x(function (d) {
-            return x(d.data.year);
+            return x(d.data.Year);
           })
           .y0(function (d) {
             return y(d[0]);
@@ -166,7 +167,7 @@ const AreaChart = () => {
             if (!idleTimeout) return (idleTimeout = setTimeout(idled, 350)); // This allows to wait a little bit
             x.domain(
               d3.extent(data, function (d) {
-                return d.year;
+                return d.Year;
               })
             );
           } else {
@@ -229,7 +230,7 @@ const AreaChart = () => {
           .join("text")
           .attr("x", 400 + size * 1.2)
           .attr("y", function (d, i) {
-            return 10 + i * (size + 5) + size / 2;
+            return 20 + i * (size + 5) + size / 2;
           }) // 100 is where the first dot appears. 25 is the distance between dots
           .style("fill", function (d) {
             return color(d);
