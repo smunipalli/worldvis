@@ -17,7 +17,7 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Unstable_Grid2";
 import Slider from "@mui/material/Slider";
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
-import Chart from "./Chart";
+import MapLegend from "./MapLegend";
 import AreaChart from "./AreaChart";
 import _ from "lodash";
 
@@ -789,82 +789,275 @@ function App() {
     };
 
     const displayChart = () => {
-      if (selectGlobes == "energyUse") {
-        return (
-          <>
-            <div
-              style={{
-                opacity: cardHover,
-                width: "64vh",
-                marginLeft: "-4vh",
-                transform: "scale(0.8)",
-              }}
-              onMouseEnter={() => setCardHover(1.0)}
-              onMouseLeave={() => setCardHover(0.5)}
-            >
-              <Card variant="outlined">
-                <CardContent>
-                  <Typography
-                    sx={{
-                      fontSize: 17,
-                      marginBottom: "30px",
-                      fontWeight: "bold",
-                    }}
-                    color="text.secondary"
-                    gutterBottom
-                  >
-                    Map Details
-                  </Typography>
-                  <br />
-                  {sliders()}
-                  {(() => {
-                    if (selectGlobes == "energyUse") return <AreaChart />;
-                    else return <></>;
-                  })()}
-                </CardContent>
-                <CardActions></CardActions>
-              </Card>
-            </div>
-          </>
-        );
-      } else {
-        return (
-          <>
-            <div
-              style={{
-                opacity: cardHover,
-                width: "28vh",
-                transform: "scale(0.8)",
-              }}
-              onMouseEnter={() => setCardHover(1.0)}
-              onMouseLeave={() => setCardHover(0.5)}
-            >
-              <Card variant="outlined">
-                <CardContent>
-                  <Typography
-                    sx={{
-                      fontSize: 17,
-                      marginBottom: "30px",
-                      fontWeight: "bold",
-                    }}
-                    color="text.secondary"
-                    gutterBottom
-                  >
-                    Map Details
-                  </Typography>
-                  <br />
-                  {sliders()}
-                  {(() => {
-                    if (selectGlobes === "worldPopulation")
-                      return <>As of March 2022</>;
-                    return <></>;
-                  })()}
-                </CardContent>
-                <CardActions></CardActions>
-              </Card>
-            </div>
-          </>
-        );
+      switch (selectGlobes) {
+        case "energyUse":
+          return (
+            <>
+              <div
+                style={{
+                  opacity: cardHover,
+                  width: "64vh",
+                  marginLeft: "-4vh",
+                  transform: "scale(0.8)",
+                }}
+                onMouseEnter={() => setCardHover(1.0)}
+                onMouseLeave={() => setCardHover(0.5)}
+              >
+                <Card variant="outlined">
+                  <CardContent>
+                    <Typography
+                      sx={{
+                        fontSize: 17,
+                        marginBottom: "30px",
+                        fontWeight: "bold",
+                      }}
+                      color="text.secondary"
+                      gutterBottom
+                    >
+                      Map Details
+                    </Typography>
+                    <br />
+                    <MapLegend
+                      data={{ color: "#0077b6", label: "High availability" }}
+                    />
+                    <MapLegend
+                      data={{ color: "#ff7d00", label: "Low availability" }}
+                    />
+                    <br />
+
+                    {sliders()}
+                    {(() => {
+                      if (selectGlobes == "energyUse") return <AreaChart />;
+                      else return <></>;
+                    })()}
+                  </CardContent>
+                  <CardActions></CardActions>
+                </Card>
+              </div>
+            </>
+          );
+
+        case "worldPopulation":
+          return (
+            <>
+              <div
+                style={{
+                  opacity: cardHover,
+                  width: "28vh",
+                  transform: "scale(0.8)",
+                }}
+                onMouseEnter={() => setCardHover(1.0)}
+                onMouseLeave={() => setCardHover(0.5)}
+              >
+                <Card variant="outlined">
+                  <CardContent>
+                    <Typography
+                      sx={{
+                        fontSize: 17,
+                        marginBottom: "30px",
+                        fontWeight: "bold",
+                      }}
+                      color="text.secondary"
+                      gutterBottom
+                    >
+                      Map Details
+                    </Typography>
+                    <br />
+                    <MapLegend
+                      data={{ color: "red", label: "High population" }}
+                    />
+                    <MapLegend
+                      data={{ color: "orange", label: "Low population" }}
+                    />
+                    <br />
+                    {sliders()}
+                    <>As of March 2022</>
+                  </CardContent>
+                  <CardActions></CardActions>
+                </Card>
+              </div>
+            </>
+          );
+
+        case "male_2529":
+          return (
+            <>
+              <div
+                style={{
+                  opacity: cardHover,
+                  width: "28vh",
+                  transform: "scale(0.8)",
+                }}
+                onMouseEnter={() => setCardHover(1.0)}
+                onMouseLeave={() => setCardHover(0.5)}
+              >
+                <Card variant="outlined">
+                  <CardContent>
+                    <Typography
+                      sx={{
+                        fontSize: 17,
+                        marginBottom: "30px",
+                        fontWeight: "bold",
+                      }}
+                      color="text.secondary"
+                      gutterBottom
+                    >
+                      Map Details
+                    </Typography>
+                    <br />
+                    <MapLegend
+                      data={{ color: "#0077b6", label: "High percentage" }}
+                    />
+                    <MapLegend
+                      data={{ color: "#ff7d00", label: "Low percentage" }}
+                    />
+                    <br />
+                    {sliders()}
+                  </CardContent>
+                  <CardActions></CardActions>
+                </Card>
+              </div>
+            </>
+          );
+        case "female_2529":
+          return (
+            <>
+              <div
+                style={{
+                  opacity: cardHover,
+                  width: "28vh",
+                  transform: "scale(0.8)",
+                }}
+                onMouseEnter={() => setCardHover(1.0)}
+                onMouseLeave={() => setCardHover(0.5)}
+              >
+                <Card variant="outlined">
+                  <CardContent>
+                    <Typography
+                      sx={{
+                        fontSize: 17,
+                        marginBottom: "30px",
+                        fontWeight: "bold",
+                      }}
+                      color="text.secondary"
+                      gutterBottom
+                    >
+                      Map Details
+                    </Typography>
+                    <br />
+                    <MapLegend
+                      data={{ color: "#0077b6", label: "High percentage" }}
+                    />
+                    <MapLegend
+                      data={{ color: "#ff7d00", label: "Low percentage" }}
+                    />
+                    <br />
+                    {sliders()}
+                  </CardContent>
+                  <CardActions></CardActions>
+                </Card>
+              </div>
+            </>
+          );
+
+        case "incomeLevel":
+          return (
+            <>
+              <div
+                style={{
+                  opacity: cardHover,
+                  width: "28vh",
+                  transform: "scale(0.8)",
+                }}
+                onMouseEnter={() => setCardHover(1.0)}
+                onMouseLeave={() => setCardHover(0.5)}
+              >
+                <Card variant="outlined">
+                  <CardContent>
+                    <Typography
+                      sx={{
+                        fontSize: 17,
+                        marginBottom: "30px",
+                        fontWeight: "bold",
+                      }}
+                      color="text.secondary"
+                      gutterBottom
+                    >
+                      Map Details
+                    </Typography>
+                    <br />
+                    <MapLegend
+                      data={{
+                        color: "#208b3a",
+                        label: "HIC (High Income Class)",
+                      }}
+                    />
+                    <MapLegend
+                      data={{
+                        color: "#1a759f",
+                        label: "UMC (Upper Middle Class)",
+                      }}
+                    />
+                    <MapLegend
+                      data={{
+                        color: "#ffca3a",
+                        label: "LMC (Lower Middle Class)",
+                      }}
+                    />
+                    <MapLegend
+                      data={{
+                        color: "#c1121f",
+                        label: "LIC (Lower Income Class)",
+                      }}
+                    />
+                    <MapLegend
+                      data={{ color: "#000000", label: "INX/Null (No Data)" }}
+                    />
+
+                    <br />
+                    {sliders()}
+                  </CardContent>
+                  <CardActions></CardActions>
+                </Card>
+              </div>
+            </>
+          );
+
+        default:
+          return (
+            <>
+              <div
+                style={{
+                  opacity: cardHover,
+                  width: "28vh",
+                  transform: "scale(0.8)",
+                }}
+                onMouseEnter={() => setCardHover(1.0)}
+                onMouseLeave={() => setCardHover(0.5)}
+              >
+                <Card variant="outlined">
+                  <CardContent>
+                    <Typography
+                      sx={{
+                        fontSize: 17,
+                        marginBottom: "30px",
+                        fontWeight: "bold",
+                      }}
+                      color="text.secondary"
+                      gutterBottom
+                    >
+                      Map Details
+                    </Typography>
+                    <br />
+                    <MapLegend data={{ color: "blue", label: "HIC" }} />
+                    <br />
+                    {sliders()}
+                  </CardContent>
+                  <CardActions></CardActions>
+                </Card>
+              </div>
+            </>
+          );
       }
     };
 
