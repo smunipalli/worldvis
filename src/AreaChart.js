@@ -89,7 +89,7 @@ const AreaChart = () => {
           .attr("text-anchor", "end")
           .attr("x", 0)
           .attr("y", -20)
-          .text("# of baby born")
+          .text("TWh energy generated from resources")
           .attr("text-anchor", "start");
 
         // Add Y axis
